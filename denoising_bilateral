@@ -1,3 +1,4 @@
+#better than gaussian in most situations!!!
 #bilateral filter
 #edge preserving denoising filter
 #replace each pixel value with a weighted average of nearby pixel values
