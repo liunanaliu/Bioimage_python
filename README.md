@@ -6,3 +6,5 @@ conda install spyder=5.3.2
 czi_read for read and save image
 
 view2D_image for display images
+
+Pyplot for plotting images via pyplot
