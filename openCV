@@ -25,7 +25,7 @@ red = img[:,:,2]
 b,g,r = cv2.split(img)
 img.merged = cv2.merge((b,g,r))
 
-
+edges = cv2.Canny(img,100,200)#image, min and max
 
 
 
