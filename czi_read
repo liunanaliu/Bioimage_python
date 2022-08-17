@@ -1,0 +1,52 @@
+import czifile
+img = czifile.imread('')
+print(img.shape)
+#time series, scenes, channels, y, x, z, RGB
+
+#extract only relevent pixel, all channels in x and y 
+img1 = img[0,0,:,:,:,0]
+print(img1.shape)
+
+#seperate signle channel
+img2 = img1[0,:,:]
+#first channel, red
+img3 = img1[1,:,:]
+#second channel, green
+img4 = img1[2,:,:]
+#third channel, blue DAPI
+
+from skimage import io, filters, img_as_ubyte
+img = io.imead('/xxx.tif')
+#type is unit8
+guassian_img = filters.gaussian(img,sigma = 3)
+#the type is float64
+
+io.imsave('/exported/xxx.jpg',gaussian_img)
+#no error
+io.imsave('/exported/xxx.tif',gaussian_img)
+#error because of its foat type
+
+gaussian_img_8bit = img_as_ubyte(gaussian_img)
+#convert the type of float64 to unit8
+#recommended
+io.imsave('/exported/xxx.tif',gaussian_img_8bit)
+#no error because of its unit8
+
+#####################################################
+import cv2
+cv2.imwrite('/exported/xxx.jpg',gaussian_img)
+#error, float
+cv2.imwrite('/exported/xxx.jpg',gaussian_img_8bit)
+#no error to open, but BGR not RGB color
+gaussian_img_8bit_RGB = cv2.cvtColor(gaussian_img_8bit,cv2.COLOR_BGR2RGB)
+cv2.imwrite('/exported/xxx.jpg',gaussian_img_8bit_RGB)
+
+#########################################################
+from matplotlib import pyplot as plt
+plt.imsave('/exported/xxx.jpg',gaussian_img)
+
+####################################################
+import tiffile
+tiffile.imwrite('/exported/xxx.tif',gaussian_img_8bit)
+
+
