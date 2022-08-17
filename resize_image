@@ -1,0 +1,26 @@
+from skimage import io,color
+from skimage.transform import rescale, resize, downscale_local_mean
+
+img = io.imread('images/xxx.tif')
+img = io.imread('images/xxx.tif', as_gray=True)
+
+img_rescaled = rescale(img, 1.0 / 4.0, anti_aliasing=False)
+
+img_resized = resize(img, (200,200),
+                     anti_aliasing=True)
+
+img_downscaled = downscale_local_mean(img,(4,3))
+
+plt.imshow(img, cmap='gray')
+
+from skimage.filter import gaussian, sobel
+
+img = io.imread('images/xxx.tif')
+plt.imshow(img)
+gaussian_using_skimage = gaussian(img, sigma=1,
+                                  mode='constant',
+                                  cval=0.0)
+#
+img_gray = io.imread('images/xxx.tif', as_gray=True)
+sobel_img = sobel(img_gray)
+plt.imshow(sobel_img, cmap='gray')
