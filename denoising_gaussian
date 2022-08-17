@@ -1,0 +1,73 @@
+#skimage like working with float files, while it does not matter for openCV
+from skimage import io,img_as_float
+from skimage.filters import gaussian
+
+img_gaussian_noise = img_as_float(io.imread('images/xxx1.tif',
+                                            as_gray=True))
+img_salt_pepper_noise = img_as_float(io.imread('images/xxx2.tif',
+                                               as_gray=True))
+
+img = img_gaussian_noise
+
+gaussian_cv2 = cv2.GaussianBlur(img,(3,3),0,
+                                borderTye=cv2.BORDER_CONSTANT)
+
+gaussian_skimage = gaussian(img,sigma=1, mode='constant',
+                            cval=0.0)
+
+cv2.imshow('xxx',img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#gaussian fits for gray, what if for multiple channels, firstly split channels, and merge them after gaussian for some specifc channels
+#while median is a better choice for salt and pepper type of noise
+
+import cv2
+from skimage.filter  import median
+
+#need 8bits, instead of float
+img_gaussian_noise = cv2.imread('images/xxx1.tif',0)
+image_salt_pepper_noise = cv2.imread('images/xxx1.tif',0)
+
+img = img_gaussian_noise
+
+median_cv2 = cv2.medianBlur(img,3)
+
+from skimage.morphology import disk
+#disk creates a circular structing element, similat to a mask with 
+#specific 
+median_skimage = median(img, disk(3), mode='constant', cval=0.0)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
