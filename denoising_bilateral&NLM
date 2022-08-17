@@ -1,0 +1,56 @@
+#better than gaussian in most situations!!!
+#bilateral filter
+#edge preserving denoising filter
+#replace each pixel value with a weighted average of nearby pixel values
+#but take into account the variation of intensities to preserve edges
+
+import cv2
+img_gaussian_noise = cv2.imread('images/xxx.tif',0)
+
+img = img_gaussian_noise
+
+bilateral_cv2 = cv2.bilateralFilter(img,5,20,100,
+                                    borderType=cv2.BORDER_CONSTANT)
+
+#5 is d - diameter of each pixel neighbour used during filtering
+#20 is sigmacolor - sigma of grey / color space
+#100 is sigmaspace - large value means farther pixels influence each other
+#increasing sigmaspace smooths larger features.
+
+#skimage is slower, and not so recommend
+from skimage.restoration import denoise_bilateral
+bilateral_skimage = denoise_bilateral(img,sigma_color=0.05,
+                                      sigma_spatial=15,
+                                      multichannel=False)
+#################################################################################                                      
+#non-local mean (NLM) mostly used in CT
+#estimated value is the weighted average of all pixels in the image, but 
+#the family of weights depend on the similarity between the pixels i and j
+#in other words, similarities of neighbour pixel give large weights.
+
+import cv2
+import numpy as np
+from skimage import io, img_as_float
+from skimage.restoration import denoise_nl_means, estimate_sigma
+
+img = img_as_float(io.imread('images/xxx.tif', 
+                             as_gray=False))
+
+sigma_est = np.mean(estimate_sigma(img,multichannel=True))
+
+denoise_img = denoise_nl_means(img,h=1.15*sigma_est,
+                               fast_mode=True,
+                               patch_size=5,
+                               patch_distance=3,
+                               multichannel=True)
+from skimage import img_as_ubyte
+
+img_as_8byte = img_as_ubyte(img)
+denoise_img_as_8byte = img_as_ubyte(denoise_img)
+
+original_img = cv2.cvtColor(img_as_8byte(),cv2.COLOR_BGR2RGB)
+final_denoised_img = cv2.cvtColor(denoise_img_as_8byte,
+                                  cv2.COLOR_BGR2RGB)
+
+cv2.imshow('original image',original_img)
+
