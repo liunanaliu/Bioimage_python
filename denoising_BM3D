@@ -14,9 +14,12 @@ import cv2
 noisy_img = img_as_float(io.imread('images/xxx.tif', 
                                    as_gray=True))
 
+##also fit for images with colors, so as_gray=False
+
 bm3d_denoised_img = bm3d.bm3d(noisy_img, 
                               sigma_psd=0.2,
                               stage_arg=bm3d.BM3DStages.HARD_THRESHOLDING)
+####free to change the parameters to optimize the effects!!!
 
 ##sigma_psd - noise standard deviation
 ## stage_arg - determine whether to perform hard-threshold or wienerr filter
