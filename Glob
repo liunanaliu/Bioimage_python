@@ -19,3 +19,18 @@ for file in glob.glob(path):
 from matplotlib import pyplot as plt
 plt.imshow(my_list[2])
 #########################
+path = 'images/*.*'
+img_number = 1
+
+import cv2
+
+for file in glob.glob(path):
+    print(file)
+    a = cv2.imread(file)
+    print(a)
+    c = cv2.cvtColor(a,cv2.COLOR_BGR2RGB)
+    cv2.imwrite('images/color_image'+str(img_number)+'.jpg',c)
+    img_number += 1
+    cv2.imshow('color image',c)
+    cv2.waitKey(1000)#display each image for 1000 ms, or 1 second?
+    cv2.destroyAllWindows()
