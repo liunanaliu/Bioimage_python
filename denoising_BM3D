@@ -1,0 +1,26 @@
+##blocking matching & 3D filtering
+##collaborative filtering process
+##group of similar blocks exrtacted from the image
+##a block is grouped if its dissimilarity with a reference fragment falls below a specifiied threshold - block matching
+##all blocks in a group are then stacked together to form 3D cylinder-like shapes
+##filtering is done on every block group, linear transformation is applied followed by Wiener filtering, 
+##then transformation is inverted to reproduce all filtered blocks.
+##image transformed back to 2D form.
+
+import bm3d
+from skimage import io,img_as_float
+import cv2
+
+noisy_img = img_as_float(io.imread('images/xxx.tif', 
+                                   as_gray=True))
+
+bm3d_denoised_img = bm3d.bm3d(noisy_img, 
+                              sigma_psd=0.2,
+                              stage_arg=bm3d.BM3DStages.HARD_THRESHOLDING)
+
+##sigma_psd - noise standard deviation
+## stage_arg - determine whether to perform hard-threshold or wienerr filter
+##bm3d.BM3DStages.HARD_THRESHOLDING or m3d.BM3DStages.ALL_STAGES (slow but powerful)
+##3d.BM3DStages.ALL_STAGES performs both hard thresholding and wiener filtering
+
+cv2.imshow('denoised',bm3d_denoised_img)
