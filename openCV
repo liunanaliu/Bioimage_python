@@ -1,0 +1,52 @@
+import cv2
+img = cv2.imread('images/xxx.jpg',1)
+#color is BGR not RGB
+plt.imshow(img)
+
+resized = cv2.resized(img,fx = 2, fy = 2, 
+                      interpolation = cv2.INTER_CUBIC)
+
+cv2.imshow('resized',resized)
+
+grey_img = cv2.imread('images/xxx.jpg',0)
+img = cv2.imread('images/xxx.jpg',1)#color is BGR not RGB
+
+print(img.shape)#(586,415,3) represents (x,y,channel)
+print('top left',img[0,0])
+print('top right',img[0,400])
+print('bottom left',img[580,0])
+print('bottom right',img[580,400])
+
+blue = img[:,:,0]
+green = img[:,:,1]
+red = img[:,:,2]
+
+#simplized in one sentence
+b,g,r = cv2.split(img)
+img.merged = cv2.merge((b,g,r))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
