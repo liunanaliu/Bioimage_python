@@ -1,0 +1,7 @@
+various types of image registration
+- translation
+- rigid body (translation + rotation)
+- scaled rotation (translation + rotation + scaling)
+- affine (translation + rotation + scaling + shearing)
+- bilinear (non-linear transformation, does not preserve straight lines)
+
