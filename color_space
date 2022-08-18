@@ -16,3 +16,44 @@ like HSV, for histogram equalization
 
 Either HSV or LAB can be used interchangeably for most image processing task.
 
+import cv2
+from skimage import io
+
+color_opencv = cv2.imread('/home/l33/Documents/spyder_bioimage/images/Osteosarcoma_01.tif',
+                          1)
+#RGB, most recommended!!!
+
+gray_opencv = cv2.imread('/home/l33/Documents/spyder_bioimage/images/Osteosarcoma_01.tif',
+                          0)
+#BGR
+
+color_skiamge = io.imread('/home/l33/Documents/spyder_bioimage/images/Osteosarcoma_01.tif',
+                          as_gray=False)
+gray_skiamge = io.imread('/home/l33/Documents/spyder_bioimage/images/Osteosarcoma_01.tif',
+                          as_gray=True)
+#both have no channels information
+
+b,g,r = cv2.split(color_opencv)
+
+cv2.imshow("raw", color_opencv)
+cv2.imshow("b", b)
+cv2.imshow("g", g)
+cv2.imshow("r", r)
+
+###############################################################
+hsv_image = cv2.cvtColor(color_opencv,cv2.COLOR_RGB2HSV)
+h,s,v = cv2.split(hsv_image)
+
+cv2.imshow("raw", color_opencv)
+cv2.imshow("h", h)
+cv2.imshow("s", s)
+cv2.imshow("v", v)
+
+#######################################################
+lab_image = cv2.cvtColor(color_opencv,cv2.COLOR_RGB2LAB)
+l,a,b = cv2.split(lab_image)
+
+cv2.imshow("raw", color_opencv)
+cv2.imshow("l", l)
+cv2.imshow("a", a)
+cv2.imshow("b", b)
