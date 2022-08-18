@@ -1,0 +1,76 @@
+many image processing function in skimage and openCv are available only for grey scale images
+like sobel, median, histogram equalization
+method1 - apply to each color channels (R, G, B)
+method2 - convert RGB to HSV or LAB then apply to V or L channels
+
+##########################################################################
+from skimage.color.adapt_rgb import adapt_rgb, each_channel,hsv_value
+from skimage import filters
+from skimage import io
+import matplotlib.pyplot as plt
+from skimage.color import rgb2gray
+
+img = io.imread('/home/l33/Documents/spyder_bioimage/images/monalisa.jpg')
+
+try_to_apply_sobel = filters.sobel(img)
+#turn into float64
+
+plt.imshow(try_to_apply_sobel)
+
+@adapt_rgb(each_channel)
+def sobel_each(img):
+    return filters.sobel(img)
+
+@adapt_rgb(hsv_value)
+def sobel_hsv(img):
+    return filters.sobel(img)
+
+each_channel_img = sobel_each(img)
+hsv_value_img = sobel_hsv(img)
+
+plt.imshow(each_channel_img)
+plt.imshow(hsv_value_img)
+
+import cv2
+
+@adapt_rgb(each_channel)
+def median_each(img,k):
+    
+    output_img = cv2.medianBlur(img,k)
+    
+    return output_img
+
+median_cv2 = median_each(img,1)
+plt.imshow(median_cv2)
+
+#############################################
+from skimage import exposure
+
+@adapt_rgb(each_channel)
+def eq_each(img):
+    output_img = exposure.equalize_hist(img)
+    return output_img
+
+eq_rgb = eq_each(img)
+plt.imshow(eq_rgb)
+
+#############################################
+@adapt_rgb(hsv_value)
+def eq_hsv(img):
+    output_img = exposure.equalize_hist(img)
+    return output_img
+
+eq_hsv = eq_hsv(img)
+plt.imshow(eq_hsv)
+
+##########################################
+fig = plt.figure(figsize=(10,10))
+
+ax1 = fig.add_subplot(2,2,1)
+ax1.imshow(img)
+ax1.title.set_text('raw')
+
+ax2 = fig.add_subplot(2,2,2)
+ax2.imshow()
+...
+plt.show()
