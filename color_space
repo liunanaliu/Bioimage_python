@@ -1,0 +1,18 @@
+color spaces are a way to represent color information present in an image.
+3 popular color spaces are RGB, HSV and LAB.
+
+RGB: red green and blue
+both skimage and openCV read color images by default as RGB, but openCV stored color information as BGR!!!
+
+HSV stores color image information as Hue, Saturation and Value,
+it separates luma, or the image intensity, from chroma or the color information
+it is used for applications where you need to change only pixel intensities and not color information
+like, histogram equalization
+
+LAB expresses color as 3 values: Lightness (consider this as your grey scale image),A (from green to red),
+B (fromm blue to yellow)
+it is used for application where you need to change only pixel intensities and not olor information,
+like HSV, for histogram equalization
+
+Either HSV or LAB can be used interchangeably for most image processing task.
+
