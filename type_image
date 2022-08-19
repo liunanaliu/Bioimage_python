@@ -1,0 +1,45 @@
+'''
+dtypes...
+unit8 - 0 to 255
+unit 16 - 0 to ((2**16)-1)
+unit 32 - 0 to ((2**32)-1)
+float - -1 to 1 or 0 to 1
+int8 - -128 to 127
+int16 - -32768 to 32767
+int32 - -2**31 to 2**31-1
+
+img_as_float - convert to 64 bit floating point
+img_as_ubyte - convert to 8 bit unit
+img_as_unit - convert to 16 bit unit
+img_as_int - convert to 16 bit int
+'''
+from skimage import io
+from image_registration import chi2_shifts
+import numpy as np
+from matplotlib import pyplot as plt
+from skimage import img_as_float
+
+img = io.imread('/home/l33/Documents/spyder_bioimage/images/test_image.jpg')
+
+print(img)
+
+2**8
+print(img.max(),img.min())
+#255 0
+img_float = img_as_float(img)
+print(img_float)
+plt.imshow(img_float)
+
+dark_img = img *0.5
+plt.imshow(dark_img)
+
+img[10:200,10:200,:] = [255,0,0]
+plt.imshow(img)
+
+
+random_img = np.random.random([500,500])
+plt.imshow(random_img)
+print(random_img)
+#float64
+
+print(random_img.min(),random_img.max())
