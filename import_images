@@ -1,0 +1,92 @@
+from PIL import Image
+import numpy as np  # pillow
+
+img = Image.open("/home/l33/Documents/spyder_bioimage/images/test_image.jpg")
+print(type(img))
+# not numpy array
+
+img.show()
+print(img.format)
+# jpeg
+
+img1 = np.asarray(img)
+print(type(img1))
+img1.show()  # error
+
+###################################################
+import matplotlib.image as mpimg
+import matplotlib.pyplot as plt
+
+img = mpimg.imread("/home/l33/Documents/spyder_bioimage/images/test_image.jpg")
+
+print(type(img))
+# np.array
+print(img.shape)
+plt.imshow(img)
+plt.colorbar()
+# not plt.colorbar(img)
+
+#####################################################
+# sciki-image
+from skimage import io, img_as_float, img_as_ubyte
+import matplotlib.pyplot as plt
+
+img = io.imread("/home/l33/Documents/spyder_bioimage/images/test_image.jpg")
+print(type(img))
+# numpy.array
+print(img)
+io.imshow(img)
+plt.imshow(img)
+
+img_float = io.imread("/home/l33/Documents/spyder_bioimage/images/test_image.jpg").astype(np.float)
+img_float = img_as_float(img)
+#real values/255
+print(img_float)
+plt.imshow(img_float)
+
+########################################################
+#opencv
+import cv2
+
+img = cv2.imread("/home/l33/Documents/spyder_bioimage/images/test_image.jpg",1)
+#0 vs 1, 0 is for gray, 1 is for color as default
+cv2.imshow('img',img)
+plt.imshow(img)
+#cv2 import BGR, not RGB by default
+plt.imshow(cv2.cvtColor(img,cv2.COLOR_BGR2RGB))
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+###########################################################
+import czifile
+
+img = czifile.imread('/home/l33/Documents/spyder_bioimage/images/test_image.czi')
+print(img.shape)
+#plt.imshow(img), error
+#but how to look at the img????
+###########################################################
+from apeer_ometiff_library import io
+
+(pic2,omexml) = io.read_ometiff('/home/l33/Documents/spyder_bioimage/images/test_image.ome.tif')
+
+print(pic2.shape)
+print(pic2)
+print(omexml)
+
+###############################################################
+import cv2
+#cv2 use BGR but not RGB
+import glob
+
+path = '/home/l33/Documents/spyder_bioimage/images/*'
+
+for file in glob.glob(path):
+    print(file)
+    a = cv2.imread(file)
+    print(a)
+    cv2.imshow(a)
+    
+    c = cv2.cvtColor(a,cv2.COLOR_BGR2RGB)
+    cv2.imshow('img',c)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
