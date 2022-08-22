@@ -1,0 +1,23 @@
+import cv2
+img = cv2.imread('/home/l33/Documents/spyder_bioimage/images/noisy_img.jpg',1)
+
+blue = img[:,:,0]
+
+green = img[:,:,1]
+
+red = img[:,:,2]
+
+blue, green, red  = cv2.split(img)
+
+img_merged = cv2.merge((blue, green, red))
+
+cv2.imshow('img_merge',img_merged)
+
+cv2.imshow('blue pixel',blue)
+
+cv2.imshow('green pixel',green)
+
+cv2.imshow('red pixel',red)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
