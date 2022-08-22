@@ -27,3 +27,16 @@ for i in corners:
     cv2.circle(img, (x,y), 3, 255, -1)
     
 cv2.imshow('corners',img)
+
+############################################################################
+img = cv2.imread('/home/l33/Documents/spyder_bioimage/images/monalisa.jpg',0)
+
+#initiate fast object with default values
+detector = cv2.FastFeatureDetector_create(50)
+#detect 50 features
+
+kp = detector.detect(img,None)
+
+img2 = cv2.drawKeypoints(img, kp, None, flags=0)
+
+cv2.imshow('corners',img2)
