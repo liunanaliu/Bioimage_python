@@ -1,0 +1,68 @@
+'''
+1. import 2 images
+2. convert to gray scale
+3. initiate orb detector
+4. find key points and describe them
+5. match keypoints - brute force matcher
+6. ramsac (reject bad keypoints)
+7. registration 2 images (use homology)
+'''
+import cv2
+import numpy as np
+
+im1 = cv2.imread('/home/l33/Documents/spyder_bioimage/images/monalisa_noisy.jpg')
+#image to be registered
+im2 = cv2.imread('/home/l33/Documents/spyder_bioimage/images/monalisa.jpg')
+#reference image
+
+#step 2
+img1 = cv2.cvtColor(im1, cv2.COLOR_RGB2GRAY)
+
+img2 = cv2.cvtColor(im2, cv2.COLOR_RGB2GRAY)
+
+#step 3 4 5 
+orb = cv2.ORB_create(50)
+
+kp1, des1 = orb.detectAndCompute(img1, None)
+
+kp2, des2 = orb.detectAndCompute(img2, None)
+
+#step 6
+matcher = cv2.DescriptorMatcher_create(cv2.DESCRIPTOR_MATCHER_BRUTEFORCE_HAMMING)
+
+matches = matcher.match(des1, des2, None)
+
+matches = sorted(matches, key=lambda x: x.distance)
+
+points1 = np.zeros((len(matches),2),dtype=np.float32)
+
+points2 = np.zeros((len(matches),2),dtype=np.float32)
+
+for i, match in enumerate(matches):
+    points1[i, :] = kp1[match.queryIdx].pt
+    points2[i, :] = kp2[match.trainIdx].pt
+print(points1)
+print(points2)
+    
+h, mask = cv2.findHomography(points1,points2,cv2.RANSAC)
+
+#use homology
+
+height, width, channels = im2.shape
+
+im1Reg = cv2.warpPerspective(im1,h,(width,height))
+cv2.imshow('ergistration',im1Reg)
+#step 7
+
+img3 = cv2.drawMatches(im1, kp1, im2, kp2, matches[:10], None)
+
+cv2.imshow('matches', img3)
+
+
+img1_2 = cv2.drawKeypoints(img1, kp1, None, flags=None)
+
+img2_2 = cv2.drawKeypoints(img2, kp2, None, flags=None)
+
+
+cv2.imshow('orb1', img1_2) 
+cv2.imshow('orb2',img2_2)
