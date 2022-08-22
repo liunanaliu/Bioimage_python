@@ -1,0 +1,26 @@
+from skimage import io, img_as_float
+from scipy import ndimage as nd
+from matplotlib import pyplot as plt
+
+img = img_as_float(io.imread('/home/l33/Documents/spyder_bioimage/images/noisy_img.jpg')
+)
+guassian_img = nd.gaussian_filter(img, sigma=5)
+
+plt.imshow(guassian_img)
+#blur and gray scale
+median_img = nd.median_filter(img,size=5)
+#change the parameter for sigma and size,
+#larger parameter will lose information
+plt.imshow(median_img)
+#color change 
+
+from skimage.restoration import denoise_nl_means, estimate_sigma
+import numpy as np
+
+sigma_est = np.mean(estimate_sigma(img,multichannel=True))
+
+denoise = denoise_nl_means(img,h=1.15*sigma_est,fast_mode=True,
+                           patch_size=5,patch_distance=3,
+                           multichannel=True)
+
+plt.imshow(denoise)
