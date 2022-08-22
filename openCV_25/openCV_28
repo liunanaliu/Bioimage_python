@@ -4,6 +4,10 @@ import matplotlib.pyplot as plt
 
 img = cv2.imread('/home/l33/Documents/spyder_bioimage/images/BSE_Google_noisy.jpg',0)
 
+median = cv2.medianBlur(img, 3)
+
+ret, th = cv2.threshold(median,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+
 ret, th = cv2.threshold(img,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
 
 kernel = np.ones((3,3),np.uint8)
@@ -18,6 +22,7 @@ opening = cv2.morphologyEx(th,cv2.MORPH_OPEN,kernel)
 plt.hist(img.flat,bins=100,range=(0,255))
 
 cv2.imshow('raw',img)
+cv2.imshow('median',median)
 cv2.imshow('OTSU',th)
 cv2.imshow('erosion',erosion)
 cv2.imshow('dilation',dilation)
