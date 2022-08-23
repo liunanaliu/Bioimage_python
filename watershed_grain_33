@@ -1,0 +1,52 @@
+import cv2
+import numpy as np
+from matplotlib import pyplot as plt
+from scipy import ndimage
+from skimage import measure, color, io
+
+img1 = io.imread('/home/l33/Documents/spyder_bioimage/images/grains2.jpg')
+img = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
+
+pixels_to_um = 0.5
+
+ret, thresh = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+
+kernel = np.ones((3,3),np.uint8)
+
+opening = cv2.morphologyEx(thresh,cv2.MORPH_OPEN, kernel, iterations = 1)
+
+sure_bg = cv2.dilate(opening, kernel, iterations = 1)
+
+dist_transform = cv2.distanceTransform(opening, cv2.DIST_L2, 3)
+#distance transformation 
+
+ret2, sure_fg = cv2.threshold(dist_transform, 0.2*dist_transform.max(), 255, 0)
+
+sure_fg = np.uint8(sure_fg)
+
+unknown = cv2.subtract(sure_bg, sure_fg)
+
+ret3, markers = cv2.connectedComponents(sure_fg)
+
+markers = markers + 10
+
+markers[unknown==255] = 0
+
+plt.imshow(markers)
+
+plt.imshow(markers, cmap='jet')
+
+markers = cv2.watershed(img1, markers)
+
+img1[markers==-1] = [0, 255, 255]
+img2 = color.label2rgb(markers, bg_label=0)
+
+cv2.imshow('overlay raw', img1)
+cv2.imshow('color grain', img2)
+
+cv2.imshow('opening',opening)
+cv2.imshow('thresh',thresh)
+cv2.imshow('sure_bg',sure_bg)
+cv2.imshow('dist_transform',dist_transform)
+cv2.imshow('sure_fg',sure_fg)
+cv2.imshow('unknown',unknown)
