@@ -106,3 +106,41 @@ print(aniso_psnr)
 plt.imshow(aniso_img, cmap='gray')
 
 ##################################
+from skimage.restoration import denoise_nl_means, estimate_sigma
+import numpy as np
+from skimage import img_as_ubyte
+
+sigma_est = np.mean(estimate_sigma(noisy_img, multichannel=False))
+
+NLM_img = denoise_nl_means(noisy_img, h=1.15*sigma_est, fast_mode=True,
+                           patch_size=9, patch_distance=5, multichannel=False)
+
+
+NLM_psnr = peak_signal_noise_ratio(ref_img, NLM_img)
+
+print(NLM_psnr)
+
+NLM_img_8byte = img_as_ubyte(NLM_img)
+plt.imshow(NLM_img, cmap='gray')
+plt.imshow(NLM_img_8byte, cmap='gray')
+
+########################################
+import cv2
+
+NLM_cv2_img = cv2.fastNlMeansDenoising(noisy_img, None, 3, 7, 21)
+#only support for 8 bit
+#error, error, error
+
+###########################################
+import bm3d
+import numpy as np
+bm3d_img = bm3d.bm3d(noisy_img, sigma_psd=0.2, stage_arg=bm3d.BM3DStages.ALL_STAGES)
+#OpenBLAS library not found
+#sudo apt-get install libopenblas-dev 
+
+bm3d_psnr = peak_signal_noise_ratio(ref_img, bm3d_img)
+
+print(bm3d_psnr)
+
+plt.imshow(bm3d_img, cmap='gray')
+
