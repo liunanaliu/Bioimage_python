@@ -1,0 +1,39 @@
+'''
+sharp = original + (original - blurred)
+
+'''
+from skimage import io, filters, feature
+import matplotlib.pyplot as plt
+from skimage.color import rgb2gray
+import cv2
+
+from skimage.filters import meijering, sato, frangi, hessian
+
+img = io.imread('images/test_image.jpg')
+
+io.imshow(img)
+
+img = rgb2gray(img)
+
+meijering_img = meijering(img)
+sato_img = sato(img)
+frangi_img = frangi(img)
+hessian_img = hessian(img)
+
+fig = plt.figure(figsize=(10,10))
+ax1 = fig.add_subplot(2,2,1)
+ax1.imshow(img, cmap='gray')
+ax1.title.set_text('input image')
+
+ax2 = fig.add_subplot(2,2,2)
+ax2.imshow(meijering_img, cmap='gray')
+ax2.title.set_text('meijering')
+
+ax3 = fig.add_subplot(2,2,3)
+ax3.imshow(sato_img, cmap='gray')
+ax3.title.set_text('sato')
+                   
+ax4 = fig.add_subplot(2,2,4)
+ax4.imshow(hessian_img, cmap='gray')
+ax4.title.set_text('hessian')                 
+#herrian is the most recommended!!!
